@@ -12,6 +12,7 @@
 - Googleフォーム連携
 - GitHub Actions経由のGitHub Pagesデプロイ
 - 生成画像を使ったヒーロー / サイドビジュアル
+- 講座・シーンカードはCSSベースのビジュアルで軽量に公開可能
 
 ## ローカル確認
 
@@ -43,11 +44,9 @@ ai-skill-diagnosis-app/
 ├── GOOGLE_FORMS_SETUP.md
 ├── .nojekyll
 ├── .github/workflows/deploy-pages.yml
-└── assets/
-    ├── hero-ai-generated.png
-    ├── sidebar-career-generated.png
-    ├── favicon.svg
-    └── 各講座・参考画像
+├── hero-ai-generated.png
+├── sidebar-career-generated.png
+└── favicon.svg
 ```
 
 ## Googleフォーム連携

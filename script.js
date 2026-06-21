@@ -183,13 +183,43 @@ function renderCategoryFilters() {
   root.innerHTML = allButton + categoryButtons;
 }
 
+function getVisualTone(item) {
+  const categories = item.categories || [];
+  if (categories.includes("automation")) return "automation";
+  if (categories.includes("data")) return "data";
+  if (categories.includes("governance")) return "governance";
+  if (categories.includes("business")) return "business";
+  return "literacy";
+}
+
+function renderVisualCard(item, variant = "course") {
+  const tone = getVisualTone(item);
+  const title = escapeHtml(item.title);
+  const label = escapeHtml(item.tag || item.target || item.mode || "AI Skill");
+  const accent = tone === "automation" ? "Agent" :
+    tone === "data" ? "Data" :
+    tone === "governance" ? "Trust" :
+    tone === "business" ? "Growth" :
+    "Basics";
+  return `
+    <div class="card-visual ${variant}-visual tone-${tone}" aria-hidden="true">
+      <span class="visual-kicker">${label}</span>
+      <strong>${accent}</strong>
+      <small>${title}</small>
+      <div class="visual-bars">
+        <i></i><i></i><i></i>
+      </div>
+    </div>
+  `;
+}
+
 function renderPreviewCourses(audience) {
   const root = $("#previewCourses");
   const source = getCatalog(audience);
   const cards = (HOME_PREVIEW_IDS[audience] || []).map(id => source.find(course => course.id === id)).filter(Boolean);
   root.innerHTML = cards.map((course, index) => `
     <article>
-      <img src="./assets/${course.image}" alt="${escapeHtml(course.title)}">
+      ${renderVisualCard(course, "preview")}
       ${index === 0 ? '<span class="preview-badge">おすすめ</span>' : ""}
       <div class="preview-course-body">
         <span class="tag">${escapeHtml(course.tag)}</span>
@@ -757,7 +787,7 @@ function renderCourses(result) {
   $("#courseAudienceLabel").textContent = isStudent ? "AI講座 for educationから提案" : "企業向け実践AI講座から提案";
   $("#courseRecommendations").innerHTML = result.courses.top.map(course => `
     <article class="course-card">
-      <img src="./assets/${course.image}" alt="${escapeHtml(course.title)}のイメージ">
+      ${renderVisualCard(course)}
       <div class="course-body">
         <span class="tag">${escapeHtml(course.tag)}</span>
         <h4>${escapeHtml(course.title)}</h4>
@@ -773,7 +803,7 @@ function renderCourses(result) {
   if (!isStudent && pkg) {
     pkgRoot.classList.add("active");
     pkgRoot.innerHTML = `
-      <img src="./assets/${pkg.image}" alt="${escapeHtml(pkg.title)}">
+      ${renderVisualCard(pkg, "package")}
       <div>
         <b>組み合わせプラン例</b>
         <h4>${escapeHtml(pkg.title)}</h4>
